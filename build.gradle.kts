@@ -21,6 +21,9 @@ tasks.register<JavaExec>("portableTest") {
     classpath = sourceSets.test.get().runtimeClasspath
     mainClass.set("megalodonte.PortableStateTest")
 }
-tasks.test { enabled = false }
+tasks.test {
+    dependsOn("portableTest")
+    failOnNoDiscoveredTests = false
+}
 tasks.check { dependsOn("portableTest") }
 publishing { publications { create<MavenPublication>("mavenJava") { from(components["java"]) } } }
