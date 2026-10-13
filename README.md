@@ -1,20 +1,15 @@
-# megalodonte-reactivity-portable
+# Megalodonte Reactivity Portable
 
-Projeção publicável dos mesmos fontes neutros de megalodonte-reactivity:
-ComputedState, ListenerManager, ForEachState e v2.ListState. Não copia nem mantém
-uma segunda implementação. A preparação de fontes é gerada em build pelo Gradle.
+This artifact publishes the platform-neutral sources of `megalodonte-reactivity`: `ComputedState`, `ListenerManager`, `ForEachState` and `v2.ListState`. Gradle prepares those sources at build time; the project does not maintain a second implementation.
 
-Depende somente de megalodonte-core e gera bytecode Java 17. Não inclui Show,
-exemplos ou module-info JavaFX.
+It depends only on `megalodonte-core` and emits Java 17 bytecode. It excludes the JavaFX `Show` component, examples and the desktop module descriptor. Android supplies its own conditional rendering component.
 
 ```kotlin
 implementation("megalodonte:megalodonte-reactivity-portable:1.0.0-beta")
 ```
 
-Não combinar com o jar de reactivity desktop no mesmo app: existem classes com
-os mesmos nomes. O backend Android fornece seu próprio Show. ComputedState e
-ForEachState possuem close para descartar observação de suas dependências.
+Do not combine this artifact with desktop `megalodonte-reactivity` on one classpath: both contain classes with the same names. Close `ComputedState` and `ForEachState` when their owning view is disposed so dependency observations are released.
 
-```powershell
-./gradlew.bat check publishToMavenLocal
+```sh
+./gradlew check publishToMavenLocal
 ```
