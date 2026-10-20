@@ -7,10 +7,20 @@ java {
     withSourcesJar()
 }
 tasks.withType<JavaCompile>().configureEach { options.release.set(17) }
+val sourceRoot = file("../megalodonte-reactivity/src/main/java")
+val portablePaths = listOf(
+    "megalodonte/ComputedState.java", "megalodonte/ListenerManager.java",
+    "megalodonte/ForEachState.java", "megalodonte/v2/ListState.java"
+)
 val portableSources = tasks.register<Sync>("preparePortableSources") {
+    doFirst {
+        val missing = portablePaths.filterNot { sourceRoot.resolve(it).isFile }
+        if (missing.isNotEmpty()) {
+            throw GradleException("Missing portable reactivity sources in $sourceRoot: ${missing.joinToString()}")
+        }
+    }
     from("../megalodonte-reactivity/src/main/java") {
-        include("megalodonte/ComputedState.java", "megalodonte/ListenerManager.java",
-            "megalodonte/ForEachState.java", "megalodonte/v2/ListState.java")
+        include(portablePaths)
     }
     into(layout.buildDirectory.dir("generated/sources/portable"))
 }
